@@ -87,7 +87,7 @@ and test your commands before you make a new one to add.
 0 18 * * 0 curl -H "Content-Type: application/json" -d '[-8]' --request PUT --url http://127.0.0.1/api/start_cleaning_zones_by_id >/dev/null 2>&1
 ```
 
-## Start crond so that the scheduler ist actually running
+## Start crond so that the scheduler is actually running
 Now that you have your crontab prepared, it's time to start the timers :)
 Run `crond` manually if you just to want to test something. In order to make it permanent and start the scheduler on boot, edit your `/etc/rc.local`
 and add `crond` right before the `exit 0` line and reboot.
