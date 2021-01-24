@@ -11,7 +11,8 @@ For this to work, the correct date and time has to be set on the robot. So check
 `/opt/roborock/watchdog/ntpserver.conf` and replace any IPs in there with only the IP of your router (if that is acting as your local ntp server). 
 If you cannot set your local router as an ntp server for whatever reason, you can enter another ntp server `server 0.somentpsomewhere.com` instead.
 If you have set strict iptables rules and the bot cannot get outside of your LAN, you can probably set the robots date and time without ntp locally by running
-`date -s '2021-01-20 10:15:00'` or whatever the required dateformat to set the systemclock and then `hwclock -w` to set the hardwareclock with the system time.
+`date -s '2021-01-20 10:15:00'` (or whatever the required dateformat is) to set the systemclock and then `hwclock -w` to write the system time to the
+hardwareclock.
 
 ## Finding out what API endpoints to call
 First I would recommend to take a look at the WebGUI of your valetudo installation in the browser, and take a peek into the
