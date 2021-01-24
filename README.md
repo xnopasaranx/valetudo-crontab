@@ -44,7 +44,7 @@ Clean zone id -1 and -4:
 curl -H "Content-Type: application/json" -d '[-1, -4]' --request PUT --url http://127.0.0.1/api/start_cleaning_zones_by_id
 ```
 
-To find the ids of your map zones open http://myrobotsip/api/zones in your browser and your will get a response from the API with 
+To find the ids of your map zones open http://YOUR.ROBOT.IP.XX/api/zones in your browser and your will get a response from the API with 
 a list of the zones you have configured on your map and their meta-data.
 
 ## Scheduling these API calls with cron
