@@ -1,7 +1,10 @@
 # valetudo-crontab
 ## A workaround for not working timers
 I am running a dustcloud build on my roborock s6 vacuum bot and on valetudo 0.6.1 the timers do not work.
-So this is a little hacky workaround to get cronjobs for scheduling roborock s6 cleaning sessions.
+So this is a little hacky workaround to set up cronjobs for scheduling roborock s6 cleaning tasks, by calling valetudos REST API endpoints.
+
+Be aware that the api endpoints might be different for you than in my examples if you are running another version of valetudo. These are not documented, as they 
+are intended to be used by the WebGUI only, so better don't bother the devs about it. You are actually meant to use the mqtt API for automation. 
 
 ## Setting the correct date and time first
 For this to work, the correct date and time has to be set on the robot. So check by running `date`. If the datetime isn't correct, have a look inside
@@ -13,13 +16,14 @@ If you have set strict iptables rules and the bot cannot get outside of your LAN
 ## Finding out what API endpoints to call
 First I would recommend to take a look at the WebGUI of your valetudo installation in the browser, and take a peek into the
 developer console. Then navigate to the sources tab and locate the /services/api.services.js file to check out the available endpoints.
-With these api endpoints we can easily set up a schedule on the robot itself.
+With these api endpoints we can easily set up a schedule on the robot itself. Take note of the request method, it can be GET or PUT with arguments passed as json,
+in some cases a POST or DELETE is used. If you have to pass arguments as json, you might be lucky and find a way to derive what the keys have to be called and 
+what type the values need to be.
 
 We will call these API endpoints with curl, a cli tool to send GET/PUT/POST requests that is already installed on the robot.
 
 ## curl API call examples
-Be aware that the api endpoints might be different for you if you are running another version of valetudo. 
-Take a look at the source like described above to amend the urls accordingly!
+Take a look at the source like described above to amend the urls accordingly! 
 
 Play around with curl while connected through ssh on the robot, the api will answer you with error messages if you screwed up or if the json data you send is not
 structured in the correct way. When a command is accepted, it well respond with OK 200
@@ -37,6 +41,16 @@ curl --request PUT --url http://127.0.0.1/api/stop_cleaning
 Sending the vacuum bot back home:
 ```
 curl --request PUT --url http://127.0.0.1/api/drive_home
+```
+
+Get status information of the robot:
+```
+curl --request GET --url http://127.0.0.1/api/state
+```
+
+Get zone information as json if you want to get crazy with scripting or something:
+```
+curl --request GET --url http://127.0.0.1/api/zones
 ```
 
 Clean zone id -1 and -4:
