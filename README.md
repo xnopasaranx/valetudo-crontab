@@ -89,9 +89,40 @@ and test your commands before you make a new one to add.
 
 ## Start crond so that the scheduler is actually running
 Now that you have your crontab prepared, it's time to start the timers :)
-Run `crond` manually if you just to want to test something. In order to make it permanent and start the scheduler on boot, edit your `/etc/rc.local`
-and add `crond` right before the `exit 0` line and reboot.
+Run `crond` manually if you just to want to test something. In order to make it permanent and start the scheduler on boot, edit the `/init/S11valetudo` script
+and add this snippet of code
+```    
+if pgrep -x crond >/dev/null
+then
+    echo "cron already running"
+else
+    crond -b
+fi
+``` 
+to the `load()` method like so
+```
+load() {
+    curtime=`cat /proc/uptime | awk -F ' ' '{print $1}'`
+    echo "[$curtime] start valetudo-daemon"
+    start-stop-daemon -S -b -q -m -p /var/run/valetudo-daemon.pid -x /usr/local/bin/valetudo-daemon.sh
+    load() {
+    curtime=`cat /proc/uptime | awk -F ' ' '{print $1}'`
+    echo "[$curtime] start valetudo-daemon"
+    start-stop-daemon -S -b -q -m -p /var/run/valetudo-daemon.pid -x /usr/local/bin/valetudo-daemon.sh
+    
+    # this checks if crond is already running and starts it if not, we only need one instance
+    if pgrep -x crond >/dev/null
+    then
+        echo "cron already running"
+    else
+        crond -b
+    fi
+    # end crond section
+}
 
+}
+```
+This way we can ensure that everytime valetudo is spun up, crond is also running in the background.
 
 
 Hopefully this will help some people who want to set up a cleaning schedule without a smart home system to control their bot.
