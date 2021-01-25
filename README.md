@@ -105,10 +105,6 @@ load() {
     curtime=`cat /proc/uptime | awk -F ' ' '{print $1}'`
     echo "[$curtime] start valetudo-daemon"
     start-stop-daemon -S -b -q -m -p /var/run/valetudo-daemon.pid -x /usr/local/bin/valetudo-daemon.sh
-    load() {
-    curtime=`cat /proc/uptime | awk -F ' ' '{print $1}'`
-    echo "[$curtime] start valetudo-daemon"
-    start-stop-daemon -S -b -q -m -p /var/run/valetudo-daemon.pid -x /usr/local/bin/valetudo-daemon.sh
     
     # this checks if crond is already running and starts it if not, we only need one instance
     if pgrep -x crond >/dev/null
@@ -118,8 +114,6 @@ load() {
         crond -b
     fi
     # end crond section
-}
-
 }
 ```
 This way we can ensure that everytime valetudo is spun up, crond is also running in the background.
